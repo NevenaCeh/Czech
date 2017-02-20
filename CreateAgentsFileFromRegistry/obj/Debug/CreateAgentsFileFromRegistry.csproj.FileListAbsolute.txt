@@ -1,0 +1,5 @@
+c:\users\nevenac\documents\visual studio 2015\Projects\CreateAgentsFileFromRegistry\bin\Debug\CreateAgentsFileFromRegistry.exe.config
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\bin\Debug\CreateAgentsFileFromRegistry.exe
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\bin\Debug\CreateAgentsFileFromRegistry.pdb
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\obj\Debug\CreateAgentsFileFromRegistry.exe
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\obj\Debug\CreateAgentsFileFromRegistry.pdb

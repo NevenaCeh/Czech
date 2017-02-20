@@ -1,0 +1,5 @@
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\bin\Release\CitanjeIzRegistra.exe.config
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\bin\Release\CitanjeIzRegistra.exe
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\bin\Release\CitanjeIzRegistra.pdb
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\obj\Release\CitanjeIzRegistra.exe
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\obj\Release\CitanjeIzRegistra.pdb

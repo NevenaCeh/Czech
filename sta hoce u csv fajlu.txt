@@ -1,0 +1,32 @@
+We would need standalone exe application, which will be configurable through command line params. Application will generate valid csv file where fields enclosed in ““ separated by ‘;‘. We would need to have source code of the application. Estimated workload by Marko Adzic was 6MD.
+ 
+
+Parameter:
+
+-f „output filename“
+
+ 
+
+profiles.csv {
+
+                ProfileName
+
+                ReportingGroup
+
+                ScheduleNames (separated by ‘,’)
+
+                ANI (filter for calling number, separated by ‘,’)
+
+                DNIS (filter for called number, separated by ‘,’)
+
+                MailboxesToMonitor(separated by ‘,’)
+
+                Prompts (separated by ‘,’) – should include all audio files we are using (profile greeting, audio file)
+
+                Workgroups (separated by ‘,’)
+
+SubRoutinesInitiated(separated by ‘,’)
+
+MenuTransfer(separated by ‘,’)
+
+}

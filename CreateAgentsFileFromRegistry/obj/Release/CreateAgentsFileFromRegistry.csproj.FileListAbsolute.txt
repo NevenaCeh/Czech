@@ -1,0 +1,6 @@
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\bin\Release\CreateAgentsFileFromRegistry.exe.config
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\bin\Release\CreateAgentsFileFromRegistry.exe
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\bin\Release\CreateAgentsFileFromRegistry.pdb
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\obj\Release\CreateAgentsFileFromRegistry.exe
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\obj\Release\CreateAgentsFileFromRegistry.pdb
+C:\Users\nevenac\Documents\Visual Studio 2015\Projects\CreateAgentsFileFromRegistry\obj\Release\CreateAgentsFileFromRegistry.csprojResolveAssemblyReference.cache

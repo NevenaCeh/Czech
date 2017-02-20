@@ -1,0 +1,527 @@
+using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Xml;
+
+namespace CitanjeIzRegistra
+{
+    public class Ucitavanje
+    {
+        public static void uzmiPodatkeIzRegEdita()
+        {
+            XmlDocument doc = new XmlDocument();
+
+            XmlDeclaration xmlDeclaration = doc.CreateXmlDeclaration("1.0", "UTF-8", null);
+
+            XmlElement root = doc.DocumentElement;
+            doc.InsertBefore(xmlDeclaration, root);
+
+            XmlElement elementkoreni = doc.CreateElement(string.Empty, "Production", string.Empty);
+
+            try {
+                XmlElement element1 = doc.CreateElement(string.Empty, "Attendant", string.Empty);
+                elementkoreni.AppendChild(element1);
+
+                string koren = "SOFTWARE\\Wow6432Node\\Interactive Intelligence\\EIC\\Directory Services\\Root\\Telenor_BG\\Production\\CIC4BG1\\AttendantData\\Attendant";
+
+                RegistryKey key = Registry.LocalMachine.OpenSubKey(koren);
+
+                if (key != null)
+                {
+
+                    string[] profili = key.GetSubKeyNames();
+
+                    foreach (string profil in profili)
+                    {
+
+                        XmlElement element2 = doc.CreateElement(string.Empty, "Profile", string.Empty);
+
+                        string[] vrednostiprofila = (string[])key.OpenSubKey(profil).GetValue("FullNodePath");
+
+                        foreach (string vp in vrednostiprofila)
+                        {
+                            string substringzaprofile = vp.Substring(34);
+                            //Console.WriteLine(substringzaprofile);
+                            string daudjeuprofil = koren + "\\" + substringzaprofile;
+
+                            RegistryKey kljuc = Registry.LocalMachine.OpenSubKey(daudjeuprofil);
+                            if (kljuc != null)
+                            {
+                                string[] kadudjemouprofile = kljuc.GetValueNames();
+
+                                int profilireporting = 0;
+                                int profilidnis = 0;
+                                int profiliani = 0;
+                                int dnisprofili = 0;
+                                int audiofajl = 0;
+
+                                bool imadnis = false;
+                                bool imaaudio = false;
+
+                                if (kadudjemouprofile.Contains("DNISString"))
+                                {
+                                    imadnis = true;
+                                }
+                                if (kadudjemouprofile.Contains("AudioFile"))
+                                {
+                                    imaaudio = true;
+                                }
+
+                                for (int i = 0; i < kadudjemouprofile.Length; i++)
+                                {
+                                    if (kadudjemouprofile[i].Equals("Reporting"))
+                                    {
+                                        profilireporting = i;
+                                    }
+                                    if (kadudjemouprofile[i].Equals("UseANI"))
+                                    {
+                                        profiliani = i;
+                                    }
+                                    if (kadudjemouprofile[i].Equals("UseDNIS"))
+                                    {
+                                        profilidnis = i;
+                                    }
+                                    if (imadnis)
+                                    {
+                                        if (kadudjemouprofile[i].Equals("DNISString"))
+                                        {
+                                            dnisprofili = i;
+                                        }
+                                    }
+                                    if (imaaudio)
+                                    {
+                                        if (kadudjemouprofile[i].Equals("AudioFile"))
+                                        {
+                                            audiofajl = i;
+                                        }
+                                    }
+                                }
+
+                                ////reporting
+                                RegistryValueKind rvkreporting = kljuc.GetValueKind(kadudjemouprofile[profilireporting]);
+                                string[] valuesreporting = (string[])kljuc.GetValue(kadudjemouprofile[profilireporting]);
+
+                                XmlElement element4 = doc.CreateElement(string.Empty, "ReportingGroup", string.Empty);
+
+                                for (int i = 0; i < valuesreporting.Length; i++)
+                                {
+                                    XmlText text2 = doc.CreateTextNode(valuesreporting[i]);
+                                    element4.AppendChild(text2);
+                                    element2.AppendChild(element4);
+                                }
+                                ////ovo dobijem od reporting atributa
+
+                                ////ani
+                                RegistryValueKind rvkani = kljuc.GetValueKind(kadudjemouprofile[profiliani]);
+                                string[] valuesasni = (string[])kljuc.GetValue(kadudjemouprofile[profiliani]);
+
+                                XmlElement element5 = doc.CreateElement(string.Empty, "ANI", string.Empty);
+
+
+                                for (int i = 0; i < valuesasni.Length; i++)
+                                {
+                                    XmlText text3 = doc.CreateTextNode(valuesasni[i]);
+                                    element5.AppendChild(text3);
+                                    element2.AppendChild(element5);
+                                }
+                                ////ovo dobijem od use ani atributa
+
+                                ////dnis
+                                RegistryValueKind rvkdnis = kljuc.GetValueKind(kadudjemouprofile[profilidnis]);
+                                string[] valuesdnis = (string[])kljuc.GetValue(kadudjemouprofile[profilidnis]);
+
+                                XmlElement element6 = doc.CreateElement(string.Empty, "DNIS", string.Empty);
+
+                                XmlElement element7 = doc.CreateElement(string.Empty, "UseDNIS", string.Empty);
+                                for (int i = 0; i < valuesdnis.Length; i++)
+                                {
+                                    XmlText text3 = doc.CreateTextNode(valuesdnis[i]);
+                                    element7.AppendChild(text3);
+                                    element6.AppendChild(element7);
+                                    element2.AppendChild(element6);
+                                }
+                                ////ovo dobijem od use dnis atributa
+
+                                //////====ako ima dnis========= 
+                                if (imadnis)
+                                {
+                                    XmlElement element8 = doc.CreateElement(string.Empty, "DNISString", string.Empty);
+
+                                    RegistryValueKind rvkdnisstring = kljuc.GetValueKind(kadudjemouprofile[dnisprofili]);
+                                    //Console.WriteLine(kljuc.GetValue(kadudjemouprofile[dnisprofili]));
+                                    string[] valuesdnisstring = (string[])kljuc.GetValue(kadudjemouprofile[dnisprofili]);
+                                    for (int i = 0; i < valuesdnisstring.Length; i++)
+                                    {
+                                        XmlText textdnisstring = doc.CreateTextNode(valuesdnisstring[i]);
+                                        element8.AppendChild(textdnisstring);
+                                        element6.AppendChild(element8);
+                                    }
+
+                                }
+                                //////ubacen dnis
+
+                                ////audio fajl
+                                if (imaaudio)
+                                {
+                                    RegistryValueKind rvkaudio = kljuc.GetValueKind(kadudjemouprofile[audiofajl]);
+                                    string[] valuesaudio = (string[])kljuc.GetValue(kadudjemouprofile[audiofajl]);
+
+                                    XmlElement elementaudio = doc.CreateElement(string.Empty, "AudioFile", string.Empty);
+
+
+                                    for (int i = 0; i < valuesaudio.Length; i++)
+                                    {
+                                        XmlText text3 = doc.CreateTextNode(valuesaudio[i]);
+                                        elementaudio.AppendChild(text3);
+                                        element2.AppendChild(elementaudio);
+                                    }
+                                }
+
+                                //ovo dobijem od audio file atributa
+                                element1.AppendChild(element2);
+
+                                //schedules
+                                foreach (String subkeyName in kljuc.GetSubKeyNames())
+                                {
+
+                                    string[] valuessubkeys = (string[])kljuc.OpenSubKey(subkeyName).GetValue("FullNodePath");
+
+                                    for (int i = 0; i < valuessubkeys.Length; i++)
+                                    {
+                                        string substringsubkeys = valuessubkeys[i].Substring(42);
+                                        string putanjadaudjeuschedules = daudjeuprofil + "\\" + substringsubkeys;
+
+                                        RegistryKey kljucevizaschedules = Registry.LocalMachine.OpenSubKey(putanjadaudjeuschedules);
+
+                                        if (kljucevizaschedules != null)
+                                        {
+                                            // Console.WriteLine("Ima kljuca za " + valuessubkeys[i]);
+                                            string[] kadudjemouschedule = kljucevizaschedules.GetValueNames();
+
+                                            int schedulename = 0;
+                                            int audiosch = 0;
+                                            bool schimaaudio = false;
+
+                                            if (kadudjemouschedule.Contains("AudioFile")) {
+                                                schimaaudio = true;
+                                            }
+
+                                            for (int j = 0; j < kadudjemouschedule.Length; j++)
+                                            {
+                                                if (kadudjemouschedule[j].Equals("Name"))
+                                                {
+                                                    schedulename = j;
+                                                }
+                                                if (schimaaudio) {
+                                                    if (kadudjemouschedule[j].Equals("AudioFile"))
+                                                    {
+                                                        audiosch = j;
+                                                    }
+                                                }                                             
+
+                                            }
+
+                                            XmlElement elementschedule = doc.CreateElement(string.Empty, "Schedule", string.Empty);
+
+                                            XmlElement elementschedulename = doc.CreateElement(string.Empty, "Name", string.Empty);
+
+                                            XmlElement elementscheduleaudio = doc.CreateElement(string.Empty, "AudioFile", string.Empty);
+
+                                            RegistryValueKind rvkschname = kljucevizaschedules.GetValueKind(kadudjemouschedule[schedulename]);
+
+                                            string[] valueschname = (string[])kljucevizaschedules.GetValue(kadudjemouschedule[schedulename]);
+
+                                            for (int k = 0; k < valueschname.Length; k++)
+                                            {
+                                                XmlText textscheduleime = doc.CreateTextNode(valueschname[k]);
+                                                elementschedulename.AppendChild(textscheduleime);
+                                                elementschedule.AppendChild(elementschedulename);
+                                                //element2.AppendChild(elementschedule);
+                                            }
+                                            if (schimaaudio) {
+                                                RegistryValueKind rvkschaudio = kljucevizaschedules.GetValueKind(kadudjemouschedule[audiosch]);
+
+                                                string[] valueschaudio = (string[])kljucevizaschedules.GetValue(kadudjemouschedule[audiosch]);
+
+                                                for (int k = 0; k < valueschaudio.Length; k++)
+                                                {
+                                                    XmlText textscheduleime = doc.CreateTextNode(valueschaudio[k]);
+                                                    elementscheduleaudio.AppendChild(textscheduleime);
+                                                    elementschedule.AppendChild(elementscheduleaudio);
+                                                }
+                                            }
+                                            
+                                            element2.AppendChild(elementschedule);
+
+                                            //menu actions
+
+                                            foreach (String subkeymenuactions in kljucevizaschedules.GetSubKeyNames())
+                                            {
+                                                string[] akcije = (string[])kljucevizaschedules.OpenSubKey(subkeymenuactions).GetValue("FullNodePath");
+
+                                                for (int h = 0; h < akcije.Length; h++)
+                                                {
+                                                    string putanjadomenuactions = putanjadaudjeuschedules + "\\";
+
+                                                    string substringmenuactions = akcije[h].Substring(50);
+
+                                                    string putanjadaudjeumenu = putanjadomenuactions + substringmenuactions;
+
+                                                    RegistryKey kljucevizamenu = Registry.LocalMachine.OpenSubKey(putanjadaudjeumenu);
+
+                                                    if (kljucevizamenu != null)
+                                                    {
+                                                        //Console.WriteLine("Usao u menu " + substringmenuactions);
+                                                        string[] kadudjemoumenu = kljucevizamenu.GetValueNames();
+
+                                                        int menuname = 0;
+                                                        int menutype = 0;
+                                                        int menudigits = 0;
+                                                        int menuaudio = 0;
+                                                        bool meniimaaudio = false;
+
+                                                        if (kadudjemoumenu.Contains("AudioFile")) {
+                                                            meniimaaudio = true;
+                                                        }
+                                                        for (int n = 0; n < kadudjemoumenu.Length; n++)
+                                                        {
+                                                            if (kadudjemoumenu[n].Equals("Name"))
+                                                            {
+                                                                menuname = n;
+                                                            }
+                                                            if (kadudjemoumenu[n].Equals("Type"))
+                                                            {
+                                                                menutype = n;
+                                                            }
+                                                            if (kadudjemoumenu[n].Equals("Digit"))
+                                                            {
+                                                                menudigits = n;
+                                                            }
+                                                            if (meniimaaudio) {
+                                                                if (kadudjemoumenu[n].Equals("AudioFile"))
+                                                                {
+                                                                    menuaudio = n;
+                                                                }
+                                                            }                                                            
+                                                        }
+
+                                                        XmlElement elementmenu = doc.CreateElement(string.Empty, "Menu", string.Empty);
+
+                                                        XmlElement elementmenuname = doc.CreateElement(string.Empty, "Name", string.Empty);
+
+                                                        XmlElement elementmenutype = doc.CreateElement(string.Empty, "Type", string.Empty);
+
+                                                        XmlElement elementmenudigit = doc.CreateElement(string.Empty, "Digit", string.Empty);
+
+                                                        XmlElement elementmenuaudio = doc.CreateElement(string.Empty, "AudioFile", string.Empty);
+
+                                                        RegistryValueKind rvkmenuname = kljucevizamenu.GetValueKind(kadudjemoumenu[menuname]);
+
+                                                        string[] valuemenuname = (string[])kljucevizamenu.GetValue(kadudjemoumenu[menuname]);
+
+                                                        for (int a = 0; a < valuemenuname.Length; a++)
+                                                        {
+                                                            XmlText textmenuname = doc.CreateTextNode(valuemenuname[a]);
+
+                                                            elementmenuname.AppendChild(textmenuname);
+                                                            elementmenu.AppendChild(elementmenuname);
+                                                        }
+
+                                                        RegistryValueKind rvkmenutype = kljucevizamenu.GetValueKind(kadudjemoumenu[menutype]);
+
+                                                        string[] valuemenutype = (string[])kljucevizamenu.GetValue(kadudjemoumenu[menutype]);
+
+                                                        for (int a = 0; a < valuemenutype.Length; a++)
+                                                        {
+                                                            XmlText textmenutype = doc.CreateTextNode(valuemenutype[a]);
+
+                                                            elementmenutype.AppendChild(textmenutype);
+                                                            elementmenu.AppendChild(elementmenutype);
+
+                                                        }
+
+                                                        RegistryValueKind rvkmenudigit = kljucevizamenu.GetValueKind(kadudjemoumenu[menudigits]);
+
+                                                        string[] valuemenudigit = (string[])kljucevizamenu.GetValue(kadudjemoumenu[menudigits]);
+
+                                                        for (int a = 0; a < valuemenudigit.Length; a++)
+                                                        {
+                                                            XmlText textmenutype = doc.CreateTextNode(valuemenudigit[a]);
+
+                                                            elementmenudigit.AppendChild(textmenutype);
+                                                            elementmenu.AppendChild(elementmenudigit);
+
+                                                        }
+                                                        if (meniimaaudio) {
+                                                            RegistryValueKind rvkmenuaudio = kljucevizamenu.GetValueKind(kadudjemoumenu[menuaudio]);
+
+                                                            string[] valuemenuaudio = (string[])kljucevizamenu.GetValue(kadudjemoumenu[menuaudio]);
+
+                                                            for (int a = 0; a < valuemenuaudio.Length; a++)
+                                                            {
+                                                                XmlText textmenuname = doc.CreateTextNode(valuemenuaudio[a]);
+
+                                                                elementmenuaudio.AppendChild(textmenuname);
+                                                                elementmenu.AppendChild(elementmenuaudio);
+                                                            }
+                                                        }                                                        
+
+                                                        elementschedule.AppendChild(elementmenu);
+
+                                                        //ako menu ima decu
+
+                                                        foreach (String menudete in kljucevizamenu.GetSubKeyNames())
+                                                        {
+
+                                                            string[] valuesmenudeca = (string[])kljucevizamenu.OpenSubKey(menudete).GetValue("FullNodePath");
+
+                                                            for (int o = 0; o < valuesmenudeca.Length; o++)
+                                                            {
+
+                                                                string substringmenudeca = valuesmenudeca[o].Substring(58);
+
+                                                                Console.WriteLine(substringmenudeca);
+
+                                                                string putanjadokonacnedece = putanjadaudjeumenu + "\\" + substringmenudeca;
+
+                                                                RegistryKey kljucevizamenudecu = Registry.LocalMachine.OpenSubKey(putanjadokonacnedece);
+
+                                                                if (kljucevizamenudecu != null)
+                                                                {
+
+                                                                    string[] kadudjemoumenudecu = kljucevizamenudecu.GetValueNames();
+
+                                                                    int name = 0;
+                                                                    int type = 0;
+                                                                    int audiomenudete = 0;
+                                                                    bool imaaudiodete = false;
+
+                                                                    if (kadudjemoumenudecu.Contains("AudioFile")) {
+                                                                        imaaudiodete = true;
+                                                                    }
+
+                                                                    for (int n = 0; n < kadudjemoumenudecu.Length; n++)
+                                                                    {
+                                                                        if (kadudjemoumenudecu[n].Equals("Name"))
+                                                                        {
+                                                                            name = n;
+                                                                        }
+                                                                        if (kadudjemoumenudecu[n].Equals("Type"))
+                                                                        {
+                                                                            type = n;
+                                                                        }
+                                                                        if (imaaudiodete) {
+                                                                            if (kadudjemoumenudecu[n].Equals("AudioFile"))
+                                                                            {
+                                                                                audiomenudete = n;
+                                                                            }
+                                                                        }
+                                                                        
+                                                                    }
+
+                                                                    XmlElement elementmenudete = doc.CreateElement(string.Empty, "MenuDete", string.Empty);
+
+                                                                    XmlElement elementmenudetename = doc.CreateElement(string.Empty, "Name", string.Empty);
+
+                                                                    XmlElement elementmenudetetype = doc.CreateElement(string.Empty, "Type", string.Empty);
+
+                                                                    XmlElement elementmenudeteaudio = doc.CreateElement(string.Empty, "AudioFile", string.Empty);
+
+                                                                    RegistryValueKind rvkmenudetename = kljucevizamenudecu.GetValueKind(kadudjemoumenudecu[name]);
+
+                                                                    string[] valuemenudetename = (string[])kljucevizamenudecu.GetValue(kadudjemoumenudecu[name]);
+
+                                                                    for (int a = 0; a < valuemenudetename.Length; a++)
+                                                                    {
+                                                                        XmlText textmenudetename = doc.CreateTextNode(valuemenudetename[a]);
+
+                                                                        elementmenudetename.AppendChild(textmenudetename);
+                                                                        elementmenudete.AppendChild(elementmenudetename);
+                                                                        // elementschedule.AppendChild(elementmenu);
+                                                                    }
+
+                                                                    RegistryValueKind rvkmenudetetype = kljucevizamenudecu.GetValueKind(kadudjemoumenudecu[type]);
+
+                                                                    string[] valuemenudetetype = (string[])kljucevizamenudecu.GetValue(kadudjemoumenudecu[type]);
+
+                                                                    for (int a = 0; a < valuemenudetetype.Length; a++)
+                                                                    {
+                                                                        XmlText textmenudetetype = doc.CreateTextNode(valuemenudetename[a]);
+
+                                                                        elementmenudetetype.AppendChild(textmenudetetype);
+                                                                        elementmenudete.AppendChild(elementmenudetetype);
+                                                                    }
+                                                                    if (imaaudiodete) {
+                                                                        RegistryValueKind rvkmenudeteaudio = kljucevizamenudecu.GetValueKind(kadudjemoumenudecu[audiomenudete]);
+
+                                                                        string[] valuemenudeteaudio = (string[])kljucevizamenudecu.GetValue(kadudjemoumenudecu[audiomenudete]);
+
+                                                                        for (int a = 0; a < valuemenudeteaudio.Length; a++)
+                                                                        {
+                                                                            XmlText textmenudetename = doc.CreateTextNode(valuemenudeteaudio[a]);
+
+                                                                            elementmenudeteaudio.AppendChild(textmenudetename);
+                                                                            elementmenudete.AppendChild(elementmenudeteaudio);
+                                                                            // elementschedule.AppendChild(elementmenu);
+                                                                        }
+                                                                    }                                                                  
+                                                                    elementmenu.AppendChild(elementmenudete);
+
+                                                                    kljucevizamenudecu.Close();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        kljucevizamenu.Close();
+                                                    }
+
+                                                }
+                                            }
+
+                                            kljucevizaschedules.Close();
+
+                                        }
+
+                                    }
+
+
+
+                                }
+                                kljuc.Close();
+                            }
+
+                        }
+
+
+
+                    }
+
+                    key.Close();
+                }
+
+                string korenwrkgrp = "SOFTWARE\\Wow6432Node\\Interactive Intelligence\\EIC\\Directory Services\\Root\\Telenor_BG\\Production\\Workgroups";
+
+                RegistryKey keywrkgrp = Registry.LocalMachine.OpenSubKey(korenwrkgrp);
+
+                if (keywrkgrp != null) {
+
+
+
+                }
+                keywrkgrp.Close();
+            }
+            catch (Exception ex) {
+                Console.WriteLine(ex.Message);
+            }
+
+            doc.AppendChild(elementkoreni);
+
+            doc.Save("C:\\temp\\document.xml");
+        }
+
+
+    }
+}

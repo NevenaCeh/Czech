@@ -1,0 +1,11 @@
+c:\users\nevenac\documents\visual studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\bin\Debug\CitanjeIzRegistra.exe.config
+c:\users\nevenac\documents\visual studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\bin\Debug\CitanjeIzRegistra.exe
+c:\users\nevenac\documents\visual studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\bin\Debug\CitanjeIzRegistra.pdb
+c:\users\nevenac\documents\visual studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\obj\Debug\CitanjeIzRegistra.exe
+c:\users\nevenac\documents\visual studio 2015\Projects\CitanjeIzRegistra\CitanjeIzRegistra\obj\Debug\CitanjeIzRegistra.pdb
+D:\Korisnici\Cesi\GetAttendantProfilesFromRegistry\CitanjeIzRegistra\bin\Debug\CitanjeIzRegistra.exe.config
+D:\Korisnici\Cesi\GetAttendantProfilesFromRegistry\CitanjeIzRegistra\obj\Debug\CitanjeIzRegistra.exe
+D:\Korisnici\Cesi\GetAttendantProfilesFromRegistry\CitanjeIzRegistra\obj\Debug\CitanjeIzRegistra.pdb
+D:\Korisnici\Cesi\GetAttendantProfilesFromRegistry\CitanjeIzRegistra\bin\Debug\CitanjeIzRegistra.exe
+D:\Korisnici\Cesi\GetAttendantProfilesFromRegistry\CitanjeIzRegistra\bin\Debug\CitanjeIzRegistra.pdb
+D:\Korisnici\Cesi\GetAttendantProfilesFromRegistry\CitanjeIzRegistra\obj\Debug\CitanjeIzRegistra.csprojResolveAssemblyReference.cache
